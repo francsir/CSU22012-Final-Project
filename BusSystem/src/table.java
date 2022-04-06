@@ -25,15 +25,12 @@ public class table<T extends  Comparable<T>> {
             this.nextInd = nextInd;
         }
     }
-
     public boolean isEmpty()
     {
         return head == null;
     }
-
     private indexNode head, tail;
     private int indPosition = 0;
-
     public int[] getIndArray()
     {
         int[] array = new int[indPosition];
@@ -45,13 +42,11 @@ public class table<T extends  Comparable<T>> {
         }
         return  array;
     }
-
     public table()
     {
         head = null;
         tail = null;
     }
-
     public void insertInd(int data)
     {
         indexNode newInd;
@@ -73,31 +68,16 @@ public class table<T extends  Comparable<T>> {
         indPosition++;
 
     }
-
     public void insertNode(int pos, T data)
     {
-        node tempNode;
-        indexNode tempInd = head;
-
-        for(int i = 1; i < pos; i ++)
+        node newNode = null;
+        indexNode newInd = head;
+        while(newInd.next != null)
         {
-            tempInd = tempInd.nextInd;
+            newNode = newInd.next;
+            newInd = newInd.nextInd;
         }
-
-        if(tempInd.next == null)
-        {
-            tempNode = new node(data, null, null);
-            tempInd.next = tempNode;
-        }
-        else{
-            tempNode = tempInd.next;
-            while(tempNode.next != null)
-            {
-             tempNode = tempNode.next;
-            }
-            tempNode.next = new node(data, null, tempNode);
-        }
-
+        newInd.next = new node(data, null, newNode);
     }
 
     public void printTable()
@@ -120,14 +100,20 @@ public class table<T extends  Comparable<T>> {
         }
 
     }
-
-
-
+    public void test()
+    {
+        indexNode tempInd = head;
+        while(tempInd.nextInd != null)
+        {
+            System.out.println(tempInd.next.data);
+            tempInd = tempInd.nextInd;
+        }
+        System.out.println(tempInd.next.data);
+    }
     public void sort()
     {
         head = Mergesort(head);
     }
-
     public indexNode Mergesort(indexNode currHead)
     {
 
@@ -145,7 +131,6 @@ public class table<T extends  Comparable<T>> {
 
         return merge(newHead1, newHead2);
     }
-
     private indexNode merge(indexNode head1, indexNode head2) {
 
         indexNode merged = new indexNode(-1, null, null);
@@ -180,7 +165,6 @@ public class table<T extends  Comparable<T>> {
         }
         return merged.nextInd;
     }
-
     private indexNode findMid(indexNode currHead) {
         indexNode slow = currHead;
         indexNode fast = currHead.nextInd;
@@ -191,8 +175,4 @@ public class table<T extends  Comparable<T>> {
         }
         return slow;
     }
-
-
-
-
 }

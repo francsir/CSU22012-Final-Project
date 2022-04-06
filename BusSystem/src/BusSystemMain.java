@@ -15,10 +15,11 @@ public class BusSystemMain {
     public static void main(String[] args)
     {
         getStops();
+        newTable.test();
         newTable.sort();
         adjMatrix = test.unPackGraph(newTable.getIndArray());
         dijkstra testDij = new dijkstra();
-        testDij.dijkstra(adjMatrix, 0, 8757);
+        testDij.dijkstra(adjMatrix, 0, 8757, 8000);
     }
 
     static void getStops()
@@ -50,7 +51,7 @@ public class BusSystemMain {
                 if(i > 0 && !s.isEmpty()) {
                     if (j % 10 == 0) {
                         newTable.insertInd(Integer.parseInt(s));
-                    } else {
+                    } else if(j % 10 == 2) {
                         newTable.insertNode(i, s);
                     }
                     j++;

@@ -1,9 +1,16 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class dijkstra {
     // Function that implements Dijkstra's single source shortest path
     // algorithm for a graph represented using adjacency matrix
     // representation
-    void dijkstra(int graph[][], int src, int V) {
+    void dijkstra(int graph[][], int src, int V, int dest) {
         int[] dist = new int[V]; // The output array. dist[i] will hold
+
+        List<Integer> pathList = new ArrayList<>();
+        List<Integer> newPathList = new ArrayList<>();
+
         // the shortest distance from src to i
 
         // sptSet[i] will true if vertex i is included in shortest
@@ -18,7 +25,6 @@ public class dijkstra {
 
         // Distance of source vertex from itself is always 0
         dist[src] = 0;
-
         // Find shortest path for all vertices
         for (int count = 0; count < V - 1; count++) {
             // Pick the minimum distance vertex from the set of vertices
@@ -40,9 +46,8 @@ public class dijkstra {
                     dist[v] = dist[u] + graph[u][v];
                 }
 
-
         }
-        printSolution(dist, V);
+
     }
     int minDistance(int[] dist, Boolean[] sptSet, int V)
     {
