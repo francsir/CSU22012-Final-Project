@@ -9,13 +9,16 @@ public class BusSystemMain {
 
     private static table<String> newTable = new table<>();
     private static routeGraph test = new routeGraph(8757);
+    private static int[][] adjMatrix;
 
 
     public static void main(String[] args)
     {
         getStops();
         newTable.sort();
-        test.unPackGraph(newTable.getIndArray());
+        adjMatrix = test.unPackGraph(newTable.getIndArray());
+        dijkstra testDij = new dijkstra();
+        testDij.dijkstra(adjMatrix, 0, 8757);
     }
 
     static void getStops()
