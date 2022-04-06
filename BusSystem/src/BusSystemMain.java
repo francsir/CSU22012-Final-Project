@@ -52,6 +52,17 @@ public class BusSystemMain {
                     if (j % 10 == 0) {
                         newTable.insertInd(Integer.parseInt(s));
                     } else if(j % 10 == 2) {
+                        String[] modify = s.split(" ", 2);
+
+                        if(modify[0].equals("NB") || modify[0].equals("WB") || modify[0].equals("SB") || modify[0].equals("EB") || modify[0].equals("FLAGSTOP"))
+                        {
+                            s = modify[1] +" " + modify[0];
+                        }
+                        modify = s.split(" ", 2);
+                        if(modify[0].equals("NB") || modify[0].equals("WB") || modify[0].equals("SB") || modify[0].equals("EB") || modify[0].equals("FLAGSTOP"))
+                        {
+                            s = modify[1] +" " + modify[0];
+                        }
                         newTable.insertNode(i, s);
                     }
                     j++;
