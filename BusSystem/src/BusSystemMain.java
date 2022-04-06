@@ -8,13 +8,14 @@ import java.util.List;
 public class BusSystemMain {
 
     private static table<String> newTable = new table<>();
+    private static routeGraph test = new routeGraph(8757);
 
 
     public static void main(String[] args)
     {
-       getStops();
-       newTable.sort();
-       newTable.printTable();
+        getStops();
+        newTable.sort();
+        test.unPackGraph(newTable.getIndArray());
     }
 
     static void getStops()

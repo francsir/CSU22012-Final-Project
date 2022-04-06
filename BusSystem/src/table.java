@@ -16,14 +16,12 @@ public class table<T extends  Comparable<T>> {
     {
         public final int data;
         public node next;
-        //public indexNode prevInd;
         public indexNode nextInd;
 
         private indexNode(int data, node next, indexNode nextInd)
         {
             this.data = data;
             this.next = next;
-            //this.prevInd = prevInd;
             this.nextInd = nextInd;
         }
     }
@@ -35,6 +33,18 @@ public class table<T extends  Comparable<T>> {
 
     private indexNode head, tail;
     private int indPosition = 0;
+
+    public int[] getIndArray()
+    {
+        int[] array = new int[indPosition];
+        indexNode currNode = head;
+        for(int i = 0; i < indPosition; i++)
+        {
+            array[i] = currNode.data;
+            currNode = currNode.nextInd;
+        }
+        return  array;
+    }
 
     public table()
     {
