@@ -17,6 +17,7 @@ public class BusSystemMain {
         getStops();
         newTable.test();
         newTable.sort();
+        newTable.test();
         adjMatrix = test.unPackGraph(newTable.getIndArray());
         dijkstra testDij = new dijkstra();
         testDij.dijkstra(adjMatrix, 0, 8757, 8000);
