@@ -10,6 +10,7 @@ public class BusSystemMain {
     private static table<String> newTable = new table<>();
     private static routeGraph test = new routeGraph(8757);
     private static int[][] adjMatrix;
+    private static TST<Integer> netTST = new TST<>();
 
 
     public static void main(String[] args)
@@ -18,9 +19,19 @@ public class BusSystemMain {
         newTable.test();
         newTable.sort();
         newTable.test();
+        getTST();
         adjMatrix = test.unPackGraph(newTable.getIndArray());
         dijkstra testDij = new dijkstra();
         testDij.dijkstra(adjMatrix, 0, 8757, 8000);
+    }
+
+    public static void getTST()
+    {
+        for(int i = 0; i < 8757; i++)
+        {
+            String key = newTable.getNodeData(i);
+            netTST.put(key, i);
+        }
     }
 
     static void getStops()

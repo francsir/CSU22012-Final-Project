@@ -42,6 +42,17 @@ public class table<T extends  Comparable<T>> {
         }
         return  array;
     }
+
+    public String getNodeData(int pos)
+    {
+        indexNode currNode = head;
+        for(int i = 0; i < pos; i++)
+        {
+            currNode = currNode.nextInd;
+        }
+
+        return currNode.next.data.toString();
+    }
     public table()
     {
         head = null;
