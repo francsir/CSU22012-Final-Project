@@ -51,7 +51,20 @@ public class LinkedList<T extends Comparable<T>>{
         indPosition++;
     }
 
+    public int getInd(int pos)
+    {
+        node currNode = head;
+        if(pos == 0)
+        {
+            return  currNode.index;
+        }
+        for(int i = 0; i < pos; i++)
+        {
+            currNode = currNode.next;
+        }
+        return currNode.next.index;
 
+    }
     public String getData(int pos)
     {
         node currNode = head;
@@ -134,13 +147,24 @@ public class LinkedList<T extends Comparable<T>>{
         return slow;
     }
 
-    public int[] getArray()
+    public Integer[] getIntArray()
     {
-        int [] array = new int[indPosition];
+        Integer[] array = new Integer[indPosition];
         node  currNode = head;
         for(int i = 0; i < indPosition; i++)
         {
             array[i] = ((Integer) currNode.data);
+            currNode = currNode.next;
+        }
+        return array;
+    }
+
+    public String[] getStrArray()
+    {
+        String[] array = new String[indPosition];
+        node currNode = head;
+        for(int i = 0; i < indPosition; i++){
+            array[i] = currNode.data.toString();
             currNode = currNode.next;
         }
         return array;

@@ -23,7 +23,12 @@ public class routeGraph {
     }
 
 
-    int[][] unPackGraph(int[] sortedInd){
+
+    // converts the transfers and stop_times .txt files into an adjacency matrix, it also creates a LinkedList that
+    //holds the arrival times. Takes in an array of sorted stopID's so it can perform binary search to find the proper
+    //index int the matrix
+
+    int[][] unPackGraph(Integer[] sortedInd){
         int [] array = getArrayTransfers();
         for(int i = 0; i < vertices; i++)
         {
@@ -57,6 +62,7 @@ public class routeGraph {
         return graph;
     }
 
+    //test function to print the adjacency matrix
     void printGraph(int[][] graph)
     {
         for(int i = 0; i <vertices; i++)
@@ -69,12 +75,12 @@ public class routeGraph {
         System.out.println();
     }
 
+
+    //unpacks the transfers.txt
     int[] getArrayTransfers()
     {
         String delimiter = "[,]+";
-        String timeDelimiter = "[:]";
         String [] token;
-        String [] timeToken;
         BufferedReader bf = null;
         List<Integer> intList = new ArrayList<>();
         try {
@@ -126,7 +132,8 @@ public class routeGraph {
         return myArray;
     }
 
-    void getArrayStops(int []sortedInd)
+    //unpacks the stop_times.txt, puts the edges in the adjacency matrix, and creates the arrivalTime linked list
+    void getArrayStops(Integer []sortedInd)
     {
         String delimiter = "[,]+";
         String timeDelimiter = "[:]";

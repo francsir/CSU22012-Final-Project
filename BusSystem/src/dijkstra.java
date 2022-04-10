@@ -1,17 +1,24 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 public class dijkstra {
+    public static LinkedList<Integer> path = new LinkedList<>();
     // Function that implements Dijkstra's single source shortest path
     // algorithm for a graph represented using adjacency matrix
     // representation
+
+    public int[] getPath()
+    {
+        int [] pathArray = new int[path.size()];
+        for(int i = 0; i < pathArray.length; i++)
+        {
+            pathArray[i] = path.get(i);
+        }
+        return pathArray;
+    }
     void dijkstra(int graph[][], int src, int V, int dest) {
         int[] dist = new int[V]; // The output array. dist[i] will hold
+        int[] parents = new int[V]; //Parent array to store shortest path tree
 
-        List<Integer> pathList = new ArrayList<>();
-        List<Integer> newPathList = new ArrayList<>();
-
-        // the shortest distance from src to i
 
         // sptSet[i] will true if vertex i is included in shortest
         // path tree or shortest distance from src to i is finalized
@@ -23,6 +30,9 @@ public class dijkstra {
             sptSet[i] = false;
         }
 
+        // The starting vertex does not
+        // have a parent
+        parents[src] = -1;
         // Distance of source vertex from itself is always 0
         dist[src] = 0;
         // Find shortest path for all vertices
@@ -43,11 +53,12 @@ public class dijkstra {
                 // edge from u to v, and total weight of path from src to
                 // v through u is smaller than current value of dist[v]
                 if (!sptSet[v] && graph[u][v] != Integer.MAX_VALUE && dist[u] != Integer.MAX_VALUE && dist[u] + graph[u][v] < dist[v]) {
+                    parents[v] = u;
                     dist[v] = dist[u] + graph[u][v];
                 }
 
         }
-
+        findPath(src, dist, parents, dest);
     }
     int minDistance(int[] dist, Boolean[] sptSet, int V)
     {
@@ -62,10 +73,31 @@ public class dijkstra {
 
         return min_index;
     }
-    void printSolution(int dist[], int V)
+    // A utility function to print
+    // the constructed distances
+    // array and shortest paths
+    private static void findPath(int startVertex, int[] distances, int[] parents, int dest)
     {
-        System.out.println("Vertex \t\t Distance from Source");
-        for (int i = 0; i < V; i++)
-            System.out.println(i + " \t\t " + dist[i]);
+        path.add(startVertex);
+        path.add(dest);
+        path.add(distances[dest]);
+        findPath(dest, parents);
     }
+
+    // Function to print shortest path
+    // from source to currentVertex
+    // using parents array
+    private static void findPath(int currentVertex,
+                                  int[] parents)
+    {
+        // Base case : Source node has
+        // been processed
+        if (currentVertex == -1)
+        {
+            return;
+        }
+        findPath(parents[currentVertex], parents);
+        path.add(currentVertex);
+    }
+
 }
