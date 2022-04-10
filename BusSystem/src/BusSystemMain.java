@@ -2,6 +2,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class BusSystemMain {
@@ -9,13 +12,14 @@ public class BusSystemMain {
     private static routeGraph routeGraph = new routeGraph(8757);
     private static int[][] adjMatrix;
     private static TST<Integer> netTST = new TST<>();
-    private static LinkedList<Integer> stopIdList = new LinkedList<>();
-    private static LinkedList<String>  placeNameList = new LinkedList<>();
-    private static LinkedList<Integer> arrivalTimeList = new LinkedList<>();
+    private static LinkedListCustom<Integer> stopIdList = new LinkedListCustom<>();
+    private static LinkedListCustom<String>  placeNameList = new LinkedListCustom<>();
+    private static LinkedListCustom<Integer> arrivalTimeList = new LinkedListCustom<>();
     private static String[][] stopInfo = new String[8757][9];
     private static dijkstra dij = new dijkstra();
     private static Integer[] stopArray;
     private static String[] placeArray;
+    private static Integer[] timeArray;
     private static search bs = new search();
     private static Scanner input = new Scanner(System.in);
 
@@ -43,9 +47,11 @@ public class BusSystemMain {
                             break;
 
                         case 2:
+                            case2();
                             break;
 
                         case 3:
+                            case3();
                             break;
 
                     }
@@ -71,17 +77,21 @@ public class BusSystemMain {
         }
      }
 
+
      public static void case1()
      {
          String s1 = "";
          String s2 = "";
+         String stop;
          int ind1;
          int ind2;
+         int stopInd;
+         int[] route;
          boolean menu = false;
 
          while(!menu)
          {
-             System.out.println("Enter menu to return to menu");
+             System.out.println("\nEnter menu to return to menu");
              System.out.print("Enter Stop One: ");
              if(input.hasNext())
              {
@@ -92,24 +102,151 @@ public class BusSystemMain {
                      menu = true;
                      break;
                  }
-                 ind1 = bs.binarySearch(placeArray, 0, stopArray.length -1, s1);
+                 ind1 = bs.binarySearch(placeArray, 0, placeArray.length -1, s1);
                  if(ind1 == -1)
                  {
                      System.out.println("Sorry that stop does not exist, remember, prefix's nb, wb, sb, eb and flagstop" +
                              " are placed at the end of the stop");
-
                  }
                  else {
                      ind2 = placeNameList.getInd(ind1);//returns the index to retrieve data from stopInfo, ind will need to decremented
 
+                     System.out.print("Enter Stop 2: ");
+                     s2 = input.next();
+                     if(s2.equals("menu"))
+                     {
+                         menu = true;
+                         break;
+                     }
+                     ind1 = bs.binarySearch(placeArray, 0, placeArray.length -1, s2);
+                     if(ind1 == -1)
+                     {
+                         System.out.println("Sorry that stop does not exist, remember, prefix's nb, wb, sb, eb and flagstop" +
+                                 " are placed at the end of the stop");
+                     }
+                     else
+                     {
+                         ind1 = placeNameList.getInd(ind1);
+
+                         dij.dijkstra(adjMatrix, ind2-2, 8757, ind1-2);
+                         route = dij.getPath();
+                         System.out.println(s1 + " to "+ s2 +"\nCost " + route[3]);
+                         for(int i = 3; i < route.length; i++)
+                         {
+                             System.out.print(stopArray[route[i]]+" -> ");
+                         }
+                         System.out.println(" End");
+                     }
                  }
              }
 
          }
+     }
+     public static void case2()
+     {
+         String s1;
+         int ind;
+         boolean isFound;
+         boolean menu = false;
+         while(!menu)
+         {
+             System.out.println("\nEnter menu to return to menu");
+             System.out.print("The stop you want information on: ");
+             if(input.hasNext())
+             {
+                 input.useDelimiter("\n");
+                 s1 = input.next();
+                 if(s1.equals("menu"))
+                 {
+                     menu = true;
+                     break;
+                 }
+                 Iterable<String> queue = netTST.keysWithPrefix(s1);
+                 isFound = false;
+                 for(String s : queue)
+                 {
+                     isFound = true;
+                    ind = bs.binarySearch(placeArray, 0, placeArray.length -1, s );
+                    ind = placeNameList.getInd(ind);
+                    for(int i = 0; i < 9; i++) {
+                       System.out.println(stopInfo[ind - 1][i]);
+                    }
+                 }
+                 if(!isFound)
+                 {
+                     System.out.print("No Station Found, remember, prefix's nb, wb, sb, eb and flagstop are placed at" +
+                             " the end of the stop");
+                 }
+             }
+         }
+     }
+     public static void case3()
+     {
+         String s1;
+         String delimiter = (":");
+         String[] token;
+         String timeStr = "";
+         Integer time;
+         int ind;
+         boolean isValid;
+         int temp;
+         boolean menu = false;
+         while(!menu)
+         {
+             System.out.println("\nEnter menu to return to menu");
+             System.out.print("Enter the time you wish to arrive at, in the format hh:mm:ss: ");
+             if(input.hasNext())
+             {
+                 isValid = false;
+                 input.useDelimiter("\n");
+                 s1 = input.next();
+                 if(s1.equals("menu"))
+                 {
+                     menu = true;
+                     break;
+                 }
+                 token = s1.split(delimiter);
+                 if(token.length == 3)
+                 {
+                     temp = Integer.parseInt(token[0]);
+                     if(temp >= 0 && temp < 24)
+                     {
+                         temp = Integer.parseInt(token[1]);
+                         if(temp >= 0 && temp <= 60)
+                         {
+                             temp = Integer.parseInt(token[2]);
+                             if(temp >= 0 && temp <= 60)
+                             {
+                                 isValid = true;
+                                 timeStr = token[0] + token[1] + token[2];
+                             }
+                         }
+                     }
+                 }
+                 if(isValid)
+                 {
+                     time = Integer.parseInt(timeStr);
+                     ind = bs.binarySearch(timeArray, 0, timeArray.length-1, time);
+                     if(ind != -1) {
 
 
+                         ind = arrivalTimeList.getInd(ind);
 
+                         ind = bs.binarySearch(stopArray, 0, stopArray.length - 1, ind);
+                         for (int i = 0; i < 9; i++) {
+                             System.out.println(stopInfo[ind - 1][i]);
+                         }
+                     }
+                     else{
+                         System.out.print("No times found");
+                     }
+                 }
+                 else{
+                     System.out.print("Error: Date isn't valid");
+                 }
 
+             }
+         }
 
      }
 
@@ -124,13 +261,15 @@ public class BusSystemMain {
         placeNameList.sort("\0");
         placeArray = placeNameList.getStrArray();
 
-
         //make the Ternary Search Tree
         getTST();
 
         //get the adjMatrix
-        Integer[] stopID = stopIdList.getIntArray();
-        adjMatrix = routeGraph.unPackGraph(stopID);
+        adjMatrix = routeGraph.unPackGraph(stopArray);
+
+        arrivalTimeList = routeGraph.getTime();
+        arrivalTimeList.sort(-1);
+        timeArray = arrivalTimeList.getIntArray();
     }
     //Function to call the Ternary Search Tree Class, it modifies the tre private tree declared above.
     public static void getTST()

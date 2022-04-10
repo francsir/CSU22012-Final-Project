@@ -10,14 +10,14 @@ public class routeGraph {
     int[][] graph;
     int vertices;
     search searcher = new search();
-    LinkedList<Integer> times = new LinkedList<>();
+    LinkedListCustom<Integer> times = new LinkedListCustom<>();
 
     public routeGraph(int dest){
         graph = new int[dest][dest];
         vertices = dest;
     }
 
-    public LinkedList<Integer> getTime()
+    public LinkedListCustom<Integer> getTime()
     {
         return times;
     }
@@ -188,7 +188,7 @@ public class routeGraph {
               tempTime = Integer.parseInt(String.valueOf(time).replaceAll(" ", ""));
               if(tempTime > 0 && tempTime < 235959)
                 {
-                    times.insertNode(tempTime, j);
+                    times.insertNode(tempTime, Integer.parseInt(token[3]));
                 }
                 j++;
             }

@@ -1,5 +1,5 @@
 import java.lang.Integer;
-public class LinkedList<T extends Comparable<T>>{
+public class LinkedListCustom<T extends Comparable<T>>{
 
 
     private class node
@@ -18,7 +18,7 @@ public class LinkedList<T extends Comparable<T>>{
 
     private node head, tail;
 
-    public LinkedList()
+    public LinkedListCustom()
     {
       head = null;
       tail = null;
