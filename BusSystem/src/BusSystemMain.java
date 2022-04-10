@@ -11,18 +11,47 @@ public class BusSystemMain {
     private static routeGraph test = new routeGraph(8757);
     private static int[][] adjMatrix;
     private static TST<Integer> netTST = new TST<>();
+    private static LinkedList<Integer> stopIdList = new LinkedList<>();
+    private static LinkedList<String>  placeNameList = new LinkedList<>();
+    private static LinkedList<Integer> arrivalTimeList = new LinkedList<>();
+    private static String[][] stopInfo = new String[8757][9];
+    private static search bs = new search();
 
 
     public static void main(String[] args)
     {
+
+
         getStops();
-        newTable.test();
-        newTable.sort();
-        newTable.test();
-        getTST();
-        adjMatrix = test.unPackGraph(newTable.getIndArray());
-        dijkstra testDij = new dijkstra();
-        testDij.dijkstra(adjMatrix, 0, 8757, 8000);
+        /*
+        for(int i = 0; i < 8757; i++)
+        stopIdList.sort(-1);
+        int[] array = stopIdList.getArray();
+        for(int i = 0; i < 8657; i ++)
+        {
+            System.out.println(Integer.toString(array[i]));
+        }
+        int ind = bs.binarySearch(array, 0, 8656, 12252);
+        System.out.print(Integer.toString(ind));
+
+
+
+         */
+
+        //stopIdList.sort(-1);
+        for(int i = 0; i < stopIdList.getIndPosition() - 1; i++)
+        {
+            System.out.println(stopIdList.getData(i));
+        }
+
+        /*
+        adjMatrix = test.unPackGraph(stopIdList.getArray());
+        arrivalTimeList = test.getTime();
+        arrivalTimeList.sort(-1);]
+
+         */
+
+
     }
 
     public static void getTST()
@@ -61,8 +90,11 @@ public class BusSystemMain {
             token = line.split(delimiter);
             for (String s : token) {
                 if(i > 0 && !s.isEmpty()) {
+                    if(i < 8758 && j < 9) {
+                        stopInfo[i-1][j] = s;
+                    }
                     if (j % 10 == 0) {
-                        newTable.insertInd(Integer.parseInt(s));
+                        stopIdList.insertNode(Integer.parseInt(s), i);
                     } else if(j % 10 == 2) {
                         String[] modify = s.split(" ", 2);
 
@@ -75,7 +107,7 @@ public class BusSystemMain {
                         {
                             s = modify[1] +" " + modify[0];
                         }
-                        newTable.insertNode(i, s);
+                        placeNameList.insertNode(s, i);
                     }
                     j++;
                 }

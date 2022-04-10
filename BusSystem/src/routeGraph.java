@@ -10,11 +10,18 @@ public class routeGraph {
     int[][] graph;
     int vertices;
     search searcher = new search();
+    LinkedList<Integer> times = new LinkedList<>();
 
     public routeGraph(int dest){
         graph = new int[dest][dest];
         vertices = dest;
     }
+
+    public LinkedList<Integer> getTime()
+    {
+        return times;
+    }
+
 
     int[][] unPackGraph(int[] sortedInd){
         int [] array = getArrayTransfers();
@@ -65,7 +72,9 @@ public class routeGraph {
     int[] getArrayTransfers()
     {
         String delimiter = "[,]+";
+        String timeDelimiter = "[:]";
         String [] token;
+        String [] timeToken;
         BufferedReader bf = null;
         List<Integer> intList = new ArrayList<>();
         try {
@@ -79,6 +88,7 @@ public class routeGraph {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         boolean start = false;
         while(line != null)
         {
@@ -86,6 +96,7 @@ public class routeGraph {
             if(start) {
                 for (String s : token) {
                     if (!s.isEmpty()) {
+
                         intList.add(Integer.parseInt(s));
                     }
                 }
@@ -100,6 +111,7 @@ public class routeGraph {
             }
             start = true;
         }
+
         try {
             bf.close();
         } catch (IOException e) {
@@ -117,10 +129,14 @@ public class routeGraph {
     void getArrayStops(int []sortedInd)
     {
         String delimiter = "[,]+";
-        String[] token;
+        String timeDelimiter = "[:]";
+        String [] token;
+        String [] timeToken;
         String[] nextToken;
+        int tempTime;
         BufferedReader bf = null;
 
+        List<Integer> timeList = new ArrayList<>();
         List<Integer> intList = new ArrayList<>();
 
         try {
@@ -142,20 +158,33 @@ public class routeGraph {
             e.printStackTrace();
         }
         nextToken = line.split(delimiter);
-
         boolean start = false;
-
+        StringBuilder time;
+        int j = 0;
         while(line != null)
         {
             if(start)
             {
+
               if(token[0].equals(nextToken[0]))
               {
                   intList.add(Integer.parseInt(token[3]));
                   intList.add(Integer.parseInt(nextToken[3]));
               }
-            }
+              timeToken = token[1].split(timeDelimiter);
+              time = new StringBuilder();
 
+              for(String s : timeToken)
+              {
+               time.append(s);
+              }
+              tempTime = Integer.parseInt(String.valueOf(time).replaceAll(" ", ""));
+              if(tempTime > 0 && tempTime < 235959)
+                {
+                    times.insertNode(tempTime, j);
+                }
+                j++;
+            }
             try
             {
                 line = bf.readLine();
